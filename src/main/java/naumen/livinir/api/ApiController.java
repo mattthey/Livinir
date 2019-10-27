@@ -3,7 +3,6 @@ package naumen.livinir.api;
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 import naumen.livinir.dao.ResidentDao;
-import naumen.livinir.entity.Announcement;
 import naumen.livinir.entity.Resident;
 import naumen.livinir.service.AnnouncementService;
 import naumen.livinir.service.ResidentService;
@@ -32,7 +31,7 @@ public class ApiController
 
     // TODO вынести тупую обработку JSON в отдльный вспомогательный модуль
 
-    @PutMapping(value = "/create-resident", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/create-resident", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public Resident createResident(HttpServletRequest request) throws IOException
     {
 //        Map<String, Object> gsonMap = getRequestJSONContent(request);

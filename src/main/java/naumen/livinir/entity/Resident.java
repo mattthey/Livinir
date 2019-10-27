@@ -1,5 +1,6 @@
 package naumen.livinir.entity;
 
+import lombok.Builder;
 import naumen.livinir.utils.Sex;
 
 import javax.persistence.*;
@@ -49,7 +50,22 @@ public class Resident implements Serializable
     // Соль + ХЭШ соответсвенно
     private String password;
 
-    public Announcement getCurrentHouse() {
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Builder.Default
+    private List<String> roles = new ArrayList<>();
+
+    public List<String> getRoles()
+    {
+        return roles;
+    }
+
+    public void setRoles(List<String> roles)
+    {
+        this.roles = roles;
+    }
+
+    public Announcement getCurrentHouse()
+    {
         return currentHouse;
     }
 

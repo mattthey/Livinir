@@ -2,6 +2,7 @@ package naumen.livinir.core;
 
 import naumen.livinir.entity.Announcement;
 import naumen.livinir.entity.Resident;
+import naumen.livinir.security.SecurityConfig;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -28,6 +29,7 @@ import java.util.Properties;
         @ComponentScan("naumen.livinir.utils"),
         @ComponentScan("naumen.livinir.service"),
 })
+@Import(SecurityConfig.class)
 public class LivinirConfiguration
 {
     @Autowired
