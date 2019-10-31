@@ -8,6 +8,11 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import java.util.List;
 
 @Repository
 public class AnnouncementDaoImpl implements AnnouncementDao
@@ -17,32 +22,29 @@ public class AnnouncementDaoImpl implements AnnouncementDao
 
     @Override
     @Transactional
-    public Announcement create(Announcement announcement)
+    public void create(Announcement announcement)
     {
         Session session = sessionFactory.getCurrentSession();
-        Announcement createdAnnouncement = (Announcement) session.save(announcement);
+        session.save(announcement);
         session.flush();
-        return createdAnnouncement;
     }
 
     @Override
     @Transactional
-    public long delete(Announcement announcement)
+    public void delete(Announcement announcement)
     {
         Session session = sessionFactory.getCurrentSession();
         session.delete(announcement);
         session.flush();
-        return announcement.getId();
     }
 
     @Override
     @Transactional
-    public Announcement update(Announcement announcement)
+    public void update(Announcement announcement)
     {
         Session session = sessionFactory.getCurrentSession();
         session.update(announcement);
         session.flush();
-        return announcement;
     }
 
     @Override
@@ -55,6 +57,19 @@ public class AnnouncementDaoImpl implements AnnouncementDao
     }
 
     @Override
+    @Transactional
+    public List<Announcement> getAnnouncements(int count)
+    {
+        Session session = sessionFactory.getCurrentSession();
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<Announcement> criteriaQuery = criteriaBuilder.createQuery(Announcement.class);
+        Root<Announcement> root = criteriaQuery.from(Announcement.class);
+        criteriaQuery.select(root);
+        return session.createQuery(criteriaQuery).setMaxResults(count).getResultList();
+    }
+
+    @Override
+    @Transactional
     public void addResident(Resident resident, Announcement announcement)
     {
     }

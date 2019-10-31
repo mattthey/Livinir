@@ -1,12 +1,9 @@
 package naumen.livinir.api;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonIOException;
 import naumen.livinir.dao.ResidentDao;
-import naumen.livinir.entity.Resident;
+import naumen.livinir.entity.Announcement;
 import naumen.livinir.service.AnnouncementService;
-import naumen.livinir.service.ResidentService;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
@@ -14,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -21,23 +19,23 @@ import java.util.Map;
 public class ApiController
 {
     @Inject
-    private ResidentService residentService;
-
-    @Inject
     private AnnouncementService announcementService;
 
     @Inject
     private ResidentDao residentDao;
 
-    // TODO вынести тупую обработку JSON в отдльный вспомогательный модуль
-
-    @PostMapping(value = "/create-resident", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Resident createResident(HttpServletRequest request) throws IOException
+    @GetMapping("/getAnnouncement")
+    public List<Announcement> getAnnoucements(HttpServletRequest request) throws IOException
     {
-//        Map<String, Object> gsonMap = getRequestJSONContent(request);
-//        Resident resident = residentService.createResidentFromParamentr(gsonMap);
-        Resident resident = residentDao.create();
-        return resident;
+        Map<String, Object> jsonRequest = getRequestJSONContent(request);
+        int count = Integer.parseInt((String) jsonRequest.getOrDefault("count", 1));
+        return announcementService.getAnnouncements(count);
+    }
+
+    @PostMapping("/add-announcement")
+    public void addAnnouncement(Announcement announcement)
+    {
+        announcementService.addAnnouncement(announcement);
     }
 
     /**
@@ -52,22 +50,9 @@ public class ApiController
         {
             return gson.fromJson(reader, Map.class);
         }
-        catch (IOException | JsonIOException | UnsupportedOperationException ex)
+        catch (IOException ex)
         {
             throw new IOException("Error converting request data from JSON", ex);
         }
     }
-
-//    private final VisitsRepository visitsRepository;
-//
-//    public ApiController(VisitsRepository visitsRepository)
-//    {
-//        this.visitsRepository = visitsRepository;
-//    }
-//
-//    @GetMapping("/visits")
-//    public Iterable<Visit> getVisits()
-//    {
-//        return visitsRepository.findAll();
-//    }
 }

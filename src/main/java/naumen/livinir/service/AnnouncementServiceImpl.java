@@ -7,6 +7,7 @@ import naumen.livinir.entity.Resident;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.util.List;
 
 @Service
 public class AnnouncementServiceImpl implements AnnouncementService
@@ -20,5 +21,17 @@ public class AnnouncementServiceImpl implements AnnouncementService
     @Override
     public void addResident(Resident resident, Announcement announcement)
     {
+    }
+
+    @Override
+    public void addAnnouncement(Announcement announcement)
+    {
+        announcementDao.create(announcement);
+    }
+
+    @Override
+    public List<Announcement> getAnnouncements(int count)
+    {
+        return announcementDao.getAnnouncements(count);
     }
 }

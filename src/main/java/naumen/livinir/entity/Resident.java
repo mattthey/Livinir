@@ -1,6 +1,5 @@
 package naumen.livinir.entity;
 
-import lombok.Builder;
 import naumen.livinir.utils.Sex;
 
 import javax.persistence.*;
@@ -27,15 +26,15 @@ public class Resident implements Serializable
     private Long id;
 
     // имя
-    @Column(name = "FIRST_NAME", nullable = false)
+    @Column(name = "FIRST_NAME") //, nullable = false)
     private String firstName;
 
     // фамилия
-    @Column(name = "LAST_NAME", nullable = false)
-    private String lastNmae;
+    @Column(name = "LAST_NAME") //, nullable = false)
+    private String lastName;
 
     // пол
-    @Column(nullable = false)
+    // @Column(nullable = false)
     private Sex sex;
 
     // день рождения
@@ -44,52 +43,42 @@ public class Resident implements Serializable
     private Date dateOfBirth;
 
     // email пользователя
-    @Column(nullable = false)
+    // @Column(nullable = false)
     private String email;
 
     // Соль + ХЭШ соответсвенно
     private String password;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @Builder.Default
-    private List<String> roles = new ArrayList<>();
+    private String login;
 
-    public List<String> getRoles()
+    public String getLogin()
+    {
+        return login;
+    }
+
+    public void setLogin(String login)
+    {
+        this.login = login;
+    }
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    private Set<String> roles = new HashSet<>();
+
+    public Set<String> getRoles()
     {
         return roles;
     }
 
-    public void setRoles(List<String> roles)
+    public void setRoles(Set<String> roles)
     {
         this.roles = roles;
-    }
-
-    public Announcement getCurrentHouse()
-    {
-        return currentHouse;
-    }
-
-    public void setCurrentHouse(Announcement currentHouse) {
-        this.currentHouse = currentHouse;
     }
 
     @ManyToOne
     private Announcement currentHouse;
 
-
-
     @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
     private List<Announcement> myAnnouncements;
-
-    public List<Announcement> getMyAnnouncements()
-    {
-        return myAnnouncements;
-    }
-
-    public void setMyAnnouncements(List<Announcement> myAnnouncements)
-    {
-        this.myAnnouncements = myAnnouncements;
-    }
 
     @Override
     public boolean equals(Object o)
@@ -105,17 +94,36 @@ public class Resident implements Serializable
         Resident resident = (Resident) o;
         return id.equals(resident.getId()) &&
                 firstName.equals(resident.getFirstName()) &&
-                lastNmae.equals(resident.getLastNmae()) &&
+                lastName.equals(resident.getLastName()) &&
                 sex == resident.getSex() &&
                 Objects.equals(dateOfBirth, resident.getDateOfBirth()) &&
                 email.equals(resident.getEmail()) &&
                 password.equals(resident.getPassword());
     }
 
+    public Announcement getCurrentHouse()
+    {
+        return currentHouse;
+    }
+
+    public void setCurrentHouse(Announcement currentHouse) {
+        this.currentHouse = currentHouse;
+    }
+
+    public List<Announcement> getMyAnnouncements()
+    {
+        return myAnnouncements;
+    }
+
+    public void setMyAnnouncements(List<Announcement> myAnnouncements)
+    {
+        this.myAnnouncements = myAnnouncements;
+    }
+
     @Override
     public int hashCode()
     {
-        return Objects.hash(id, firstName, lastNmae, sex, dateOfBirth, email, password);
+        return Objects.hash(id, firstName, lastName, sex, dateOfBirth, email, password);
     }
 
     public Long getId()
@@ -138,14 +146,14 @@ public class Resident implements Serializable
         this.firstName = firstName;
     }
 
-    public String getLastNmae()
+    public String getLastName()
     {
-        return lastNmae;
+        return lastName;
     }
 
-    public void setLastNmae(String lastNmae)
+    public void setLastName(String lastName)
     {
-        this.lastNmae = lastNmae;
+        this.lastName = lastName;
     }
 
     public Sex getSex()

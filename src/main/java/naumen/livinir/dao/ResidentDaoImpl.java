@@ -1,15 +1,18 @@
 package naumen.livinir.dao;
 
 import naumen.livinir.entity.Resident;
-import naumen.livinir.utils.Sex;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
+
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import java.util.List;
 
 @Repository
 public class ResidentDaoImpl implements ResidentDao
@@ -17,36 +20,13 @@ public class ResidentDaoImpl implements ResidentDao
     @Autowired
     private SessionFactory sessionFactory;
 
-    // TODO хочется работать со спринговой анотацией Transactional (но эта тварь чет не заводится)
-
     @Override
     @Transactional
     public void create(Resident resident)
     {
         Session session = sessionFactory.getCurrentSession();
-        Transaction tx = session.beginTransaction();
-        session.save(resident);
-        tx.commit();
-    }
-
-    @Override
-    @Transactional
-    public Resident create()
-    {
-        Resident resident = new Resident();
-        resident.setPassword("sad");
-        resident.setLastNmae("sadsadas");
-        resident.setFirstName("asdasdasd");
-        resident.setEmail("asdasdsadsadasd");
-        resident.setSex(Sex.MALE);
-        resident.setDateOfBirth(new Date());
-
-        Session session = sessionFactory.getCurrentSession();
-//        Transaction tx = session.beginTransaction();
         session.save(resident);
         session.flush();
-//        tx.commit();
-        return resident;
     }
 
     @Override
@@ -68,8 +48,66 @@ public class ResidentDaoImpl implements ResidentDao
     }
 
     @Override
+    @Transactional
     public Resident getById(long id)
     {
-        return null;
+        Session session = sessionFactory.getCurrentSession();
+
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<Resident> criteriaQuery = criteriaBuilder.createQuery(Resident.class);
+        Root<Resident> root = criteriaQuery.from(Resident.class);
+        criteriaQuery.select(root)
+                     .where(criteriaBuilder.equal(root.get("id"), id));
+        Query query = session.createQuery(criteriaQuery).setMaxResults(1);
+        List<Resident> results = (List<Resident>) query.getResultList();
+        return results.size() > 0 ? results.get(0) : null;
+    }
+
+    @Override
+    @Transactional
+    public Boolean existsByEmail(String email)
+    {
+        Session session = sessionFactory.getCurrentSession();
+
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<Resident> criteriaQuery = criteriaBuilder.createQuery(Resident.class);
+        Root<Resident> root = criteriaQuery.from(Resident.class);
+        criteriaQuery.select(root)
+                .where(criteriaBuilder.equal(root.get("email"), email));
+        Query query = session.createQuery(criteriaQuery).setMaxResults(1);
+        List<Resident> results = (List<Resident>) query.getResultList();
+        return results.size() > 0;
+    }
+
+    @Override
+    @Transactional
+    public Resident findByLogin(String login)
+    {
+        Session session = sessionFactory.getCurrentSession();
+
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<Resident> criteriaQuery = criteriaBuilder.createQuery(Resident.class);
+        Root<Resident> root = criteriaQuery.from(Resident.class);
+        criteriaQuery.select(root)
+                .where(criteriaBuilder.equal(root.get("login"), login));
+        Query query = session.createQuery(criteriaQuery).setMaxResults(1);
+        List<Resident> results = (List<Resident>) query.getResultList();
+        return results.size() > 0 ? results.get(0) : null;
+    }
+
+    @Override
+    @Transactional
+    public Boolean existsByLogin(String login)
+    {
+        Session session = sessionFactory.getCurrentSession();
+
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<Resident> criteriaQuery = criteriaBuilder.createQuery(Resident.class);
+        Root<Resident> root = criteriaQuery.from(Resident.class);
+        criteriaQuery.select(root)
+                .where(criteriaBuilder.equal(root.get("login"), login));
+        Query query = session.createQuery(criteriaQuery).setMaxResults(1);
+        List<Resident> results = (List<Resident>) query.getResultList();
+        return results.size() > 0;
     }
 }

@@ -20,12 +20,11 @@ public class Announcement implements Serializable
     // название таблицы
     public static final String NAME_TABLE = "tbl_announcement";
 
-    // TODO генерировать UUID
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    // TODO сформировать сущность адреса или воспользоваться готовым решением (потом можно прифигачить полнотекстовый поиск)
+    // TODO сформировать сущность адреса или воспользоваться готовым решением
 
     // Город
     private String city;

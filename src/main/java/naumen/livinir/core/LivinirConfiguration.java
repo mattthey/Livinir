@@ -2,10 +2,10 @@ package naumen.livinir.core;
 
 import naumen.livinir.entity.Announcement;
 import naumen.livinir.entity.Resident;
-import naumen.livinir.security.SecurityConfig;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
@@ -21,15 +21,14 @@ import java.util.Properties;
 @Configuration
 @EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class,
         DataSourceTransactionManagerAutoConfiguration.class,
+        JpaRepositoriesAutoConfiguration.class,
         HibernateJpaAutoConfiguration.class})
 @PropertySource("classpath:db.properties")
 @EnableTransactionManagement
 @ComponentScans(value = {
-        @ComponentScan("naumen.livinir.dao"),
-        @ComponentScan("naumen.livinir.utils"),
-        @ComponentScan("naumen.livinir.service"),
+        @ComponentScan("naumen.livinir.*")
 })
-@Import(SecurityConfig.class)
+@Import( { SecurityConfig.class })
 public class LivinirConfiguration
 {
     @Autowired
@@ -47,7 +46,7 @@ public class LivinirConfiguration
     }
 
     @Bean
-    public LocalSessionFactoryBean getSessionFactory()
+    public LocalSessionFactoryBean sessionFactory()
     {
         LocalSessionFactoryBean factoryBean = new LocalSessionFactoryBean();
         factoryBean.setDataSource(getDataSource());
@@ -59,90 +58,16 @@ public class LivinirConfiguration
 
         factoryBean.setHibernateProperties(props);
         factoryBean.setAnnotatedClasses(Resident.class, Announcement.class);
+        // TODO хз что будет лучше
+//        factoryBean.setPackagesToScan({""});
         return factoryBean;
     }
 
     @Bean
-    public HibernateTransactionManager getTransactionManager()
+    public HibernateTransactionManager transactionManager()
     {
         HibernateTransactionManager transactionManager = new HibernateTransactionManager();
-        transactionManager.setSessionFactory(getSessionFactory().getObject());
+        transactionManager.setSessionFactory(sessionFactory().getObject());
         return transactionManager;
     }
-
-//    private static final Logger LOGGER = LoggerFactory.getLogger(HelloWorldConfiguration.class);
-//    @NotEmpty
-//    private String template;
-//
-//    @NotEmpty
-//    private String defaultName = "Stranger";
-//
-//    @Valid
-//    @NotNull
-//    private DataSourceFactory database = new DataSourceFactory();
-//
-//    @JsonProperty
-//    public String getTemplate()
-//    {
-//        return template;
-//    }
-//
-//    @JsonProperty
-//    public void setTemplate(String template)
-//    {
-//        this.template = template;
-//    }
-//
-//    @JsonProperty
-//    public String getDefaultName()
-//    {
-//        return defaultName;
-//    }
-//
-//    @JsonProperty
-//    public void setDefaultName(String defaultName) {
-//        this.defaultName = defaultName;
-//    }
-//
-//    public Template buildTemplate() {
-//        return new Template(template, defaultName);
-//    }
-//
-//    /**
-//     * This gets called with the values from the Dropwizard example.xmp, but we want to override it with the values
-//     * from the Heroku DATABASE_URL environment variable.
-//     */
-//    @JsonProperty("database")
-//    public DataSourceFactory getDataSourceFactory() {
-//        LOGGER.info("Dropwizard dummy DB URL (will be overridden)=" + database.getUrl());
-//        DatabaseConfiguration databaseConfiguration = ExampleDatabaseConfiguration.create(System.getenv("DATABASE_URL"));
-//        database = databaseConfiguration.getDataSourceFactory(null);
-//        LOGGER.info("Heroku DB URL=" + database.getUrl());
-//        return database;
-//    }
-//
-//    @JsonProperty("database")
-//    public void setDataSourceFactory(DataSourceFactory dataSourceFactory)
-//    {
-//        this.database = dataSourceFactory;
-//    }
-
-//    @Bean
-//    public SessionFactory sessionFactory()
-//    {
-//
-//    }
-//
-//    public SessionFactory sessionFactory()
-//    {
-//        return sessionFactory().getObject();
-//    }
-//
-//    private Properties getHibernateProperties()
-//    {
-//        Properties properties = new Properties();
-//        properties.put("hibernate.show_sql", "true");
-//        properties.put("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
-//        return properties;
-//    }
 }
