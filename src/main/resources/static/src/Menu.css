@@ -1,0 +1,32 @@
+.nav{
+    min-width: 640px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    background-color: transparent;
+    overflow: hidden;
+}
+
+ul.nav li{
+    text-align: center;
+    font-size: 30px;
+    border: gray 20px solid;
+    border-image: url(image/border1.png) 90 round round ;
+    width: 15%;
+}
+ul{
+    width:75vw;
+}
+.Menu{
+    display: flex;
+    justify-content: center;
+    max-height: 100px;
+}
+img{
+    margin-left: 0;
+    margin-right: 5%;
+    border:black 5px double;
+}

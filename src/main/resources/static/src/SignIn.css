@@ -1,0 +1,26 @@
+SignIn{
+    position: relative;
+    margin: 0 10px;
+    width: 640px;
+    background: linear-gradient(90deg, rgba(233,233,255,1) 5%, rgba(255,255,255,1) 5%, rgba(255,255,255,1) 95%, rgba(233,233,255,1) 95%);
+    text-align: center;
+    top: 0;
+    padding: 10px;
+    border-radius: 20px;
+    z-index: 1;
+}
+.ParentSignIn{
+    background-color: rgba(0, 0, 0, 0.3);
+    top: 0px;
+    display: flex;
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+}
+.SignIn input{
+    border-radius: 10px;
+    margin: 5px 10px;
+    text-align: center
+}
