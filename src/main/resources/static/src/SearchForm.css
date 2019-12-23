@@ -11,10 +11,12 @@ button{
 }
 .SearchForm{
     padding: 5px;
-    border: gray 20px solid;
-    border-image: url(image/border9.png) 50 repeat repeat ;
-    width: 100vh;
+    padding: 20px;
+    border: lightslategray 3px solid;
+    /*border-image: url(image/border9.png) 50 repeat repeat ;*/
+    width: 70%;
     border-radius: 10px;
+    margin-bottom: 50px;
 }
 a {text-decoration: none;}
 

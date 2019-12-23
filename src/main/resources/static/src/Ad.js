@@ -13,18 +13,22 @@ class Ad extends Component{
         // this.owner_id = ad.owner_id;
         // this.name =  JSON.parse(fetch('/name/user', {id: this.id}).text()).first_name;
         this.state={
-            name: 'Name',
-            area: 'Ekb',
+            name:
+                'Name',
+            city: 'Ekb',
+            area: 'Botanika',
             lease_date:'02.10.2010'
         }
     }
     render() {
         return ( <div className="Ad">
             <h3> {this.state.name} </h3>
-            {this.state.area} <br/>
+            {this.state.city} <br/>
+            {this.state.area}<br/>
             {this.state.lease_date}
             <button className="detailed">more detailed</button>
-        </div>);
+        </div>
+        );
     }
 }
 export default Ad;

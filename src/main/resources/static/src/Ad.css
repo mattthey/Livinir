@@ -1,9 +1,13 @@
 div.Ad{
     position: relative;
     width:300px;
+    height: 70%;
+    min-height: 100px;
+    margin: 5px;
     #border: 2px solid black;
-    color:blue;
-    background: linear-gradient(101deg, rgba(255,255,255,1) 14%, rgba(233,233,255,1) 42%, rgba(184,179,214,1) 62%, rgba(134,126,181,1) 81%, rgba(39,31,89,1) 100%);
+    color:darkslategray;
+    /*background: linear-gradient(101deg, rgba(255,255,255,1) 14%, rgba(233,233,255,1) 42%, rgba(184,179,214,1) 62%, rgba(134,126,181,1) 81%, rgba(39,31,89,1) 100%);*/
+    background:ghostwhite;
     padding:3px 5px 10px;
     font-size: 18px;
     border-radius: 20px;
@@ -12,15 +16,17 @@ div.Ad{
     margin:0 42%;
     color: black;
     font-size: 20px;
+    font-family: 'Courier New', monospace;
 }
 
 .detailed{
     height: 30%;
-    color: darkblue;
+    color: black;
     font-size: 16px;
     position: absolute;
     bottom: 10px;
     right: 10px;
-    background-color: white;
+    background: linear-gradient(101deg, rgba(255,255,255,1) 14%, rgba(233,233,255,1) 42%, rgba(184,179,214,1) 62%, rgba(134,126,181,1) 81%, rgba(39,31,89,1) 100%);
     border-radius: 5px;
+    font-weight: bold;
 }

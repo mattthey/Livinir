@@ -30,3 +30,10 @@
     flex-direction: column;
     align-items: center;
 }
+
+.Fail{
+    font-weight: bold;
+    font-size: 20px;
+    color: darkslategray;
+    font-family: 'Courier New', monospace;
+}

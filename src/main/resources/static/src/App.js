@@ -5,7 +5,6 @@ import {createBrowserHistory} from 'history'
 import './App.css'
 import SignUp from './SignUp'
 import SignIn from './SignIn'
-import logotype from './image/L1.png'
 
 const history = createBrowserHistory();
 const Profile = ()=>(
@@ -20,7 +19,7 @@ class App extends React.Component {
         <Router history={history}>
             <div className='App'>
                 <Route exact path='/' component={Home}/>
-                <Route path='/signUp' component={SignUp}/>
+                <Route exact path='/signUp' component={SignUp}/>
                 <Route path='/signIn' component={SignIn}/>
                 <Route path='/profile' component={Profile}/>
                 <Route path='/chat' component={Chat}/>

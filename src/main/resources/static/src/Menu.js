@@ -1,4 +1,4 @@
-import logotype from "./image/L1.png";
+import logotype from "./image/Home.png";
 import {Link} from "react-router-dom";
 import React,{Component} from 'react';
 import './Menu.css'
