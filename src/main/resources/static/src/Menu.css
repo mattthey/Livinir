@@ -10,14 +10,19 @@
     overflow: hidden;
 }
 
-ul.nav li{
-    padding-top: 2%;
-    text-align: center;
+ul.nav li, .Logout {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-size: 30px;
     border: lightslategray 2px solid;
     /*border-image: url(image/border1.png) 90 round round ;*/
     width: 15%;
     border-radius: 10px;
+}
+.Logout{
+    height: 100%;
+    color: #611a8b;
 }
 ul{
     width:75vw;

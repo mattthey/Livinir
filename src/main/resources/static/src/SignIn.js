@@ -1,5 +1,6 @@
 import React,{Component} from 'react';
 import { Redirect } from 'react-router';
+import cookie from 'react-cookies';
 import './Sign.css'
 
 const namesForm = ['email','password'];
@@ -37,9 +38,12 @@ class SignIn extends Component{
         let {status, statusText} = ['', ''];
         e.preventDefault();
         const response = await this.sentFetch(e);
-        if (response && response.ok)
-            this.setState({ redirect: true });
-        else {
+        // cookie.save('userLog','sad', { path: '/'});
+        if (response && response.ok) {
+            const payload = await response.json();//жду jwt token и login пользователя
+            cookie.save('userLog', payload.login, { path: '/'});
+            this.setState({redirect: true});
+        }else {
             if (response)
                 [status, statusText] = [response.status, response.statusText] ;
             else

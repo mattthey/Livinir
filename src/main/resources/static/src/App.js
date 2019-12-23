@@ -5,11 +5,9 @@ import {createBrowserHistory} from 'history'
 import './App.css'
 import SignUp from './SignUp'
 import SignIn from './SignIn'
+import Profile from "./Profile";
 
 const history = createBrowserHistory();
-const Profile = ()=>(
-    <h2>Profile</h2>
-)
 const Chat = ()=>(
     <h2>Chat</h2>
 )
