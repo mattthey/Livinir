@@ -1,3 +1,37 @@
 .Profile{
     min-height: 100vh;
+    display: flex;
+    justify-content: center;
+}
+
+.DataProfile, .DataAd{
+    padding: 15px;
+    margin-top: 10%;
+    width: 30%;
+    height: 80%;
+    background: white;
+    border-radius: 10px;
+    border: lightslategray 3px solid;
+    font-weight: bold;
+    font-size: 20px;
+    color: darkslategray;
+    font-family: 'Courier New', monospace;
+}
+
+input{
+    margin: 5px;
+}
+
+.DataProfile h3, .DataAd h3{
+    margin: 0 35% 0;
+    color: black;
+    font-size: 30px;
+    font-family: 'Courier New', monospace;
+}
+
+
+textarea{
+    margin: 5px 10px 5px 5px;
+    width: 98%;
+    height: 150px;
 }

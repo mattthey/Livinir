@@ -8,7 +8,7 @@ div.Ad{
     color:darkslategray;
     /*background: linear-gradient(101deg, rgba(255,255,255,1) 14%, rgba(233,233,255,1) 42%, rgba(184,179,214,1) 62%, rgba(134,126,181,1) 81%, rgba(39,31,89,1) 100%);*/
     background:white;
-    padding:3px 5px 10px;
+    padding:3px 15px 10px;
     font-size: 18px;
     border-radius: 20px;
 }
