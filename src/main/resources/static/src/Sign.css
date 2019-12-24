@@ -2,7 +2,7 @@
     position: relative;
     margin: 0 10px;
     width: 640px;
-    background: linear-gradient(90deg, rgba(233,233,255,1) 5%, rgba(255,255,255,1) 5%, rgba(255,255,255,1) 95%, rgba(233,233,255,1) 95%);
+    background: linear-gradient(90deg, rgba(95, 107, 78, 0.8) 5%, rgba(255,255,255,1) 5%, rgba(255,255,255,1) 95%, rgba(95, 107, 78, 0.8) 95%);
     text-align: center;
     top: 0;
     padding: 10px;
