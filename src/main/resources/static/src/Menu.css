@@ -19,10 +19,11 @@ ul.nav li, .Logout {
     /*border-image: url(image/border1.png) 90 round round ;*/
     width: 15%;
     border-radius: 10px;
+    color: rgba(65, 97, 65, 1);
 }
 .Logout{
     height: 100%;
-    color: #611a8b;
+    /*color: #611a8b;*/
 }
 ul{
     width:75vw;
@@ -35,4 +36,7 @@ ul{
 img{
     margin-left: 0;
     margin-right: 5%;
+}
+a:-webkit-any-link {
+     color: rgba(65, 97, 65, 1);
 }
