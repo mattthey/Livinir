@@ -7,7 +7,7 @@ div.Ad{
     #border: 2px solid black;
     color:darkslategray;
     /*background: linear-gradient(101deg, rgba(255,255,255,1) 14%, rgba(233,233,255,1) 42%, rgba(184,179,214,1) 62%, rgba(134,126,181,1) 81%, rgba(39,31,89,1) 100%);*/
-    background:ghostwhite;
+    background:white;
     padding:3px 5px 10px;
     font-size: 18px;
     border-radius: 20px;
@@ -27,6 +27,7 @@ div.Ad{
     bottom: 10px;
     right: 10px;
     background: linear-gradient(101deg, rgba(255,255,255,1) 14%, rgba(233,233,255,1) 42%, rgba(184,179,214,1) 62%, rgba(134,126,181,1) 81%, rgba(39,31,89,1) 100%);
+    /*background: linear-gradient(172deg, rgba(255,255,255,1) 17%, rgba(233,233,255,1) 41%, rgba(215,173,255,1) 61%, rgba(183,148,255,1) 87%, rgba(176,169,223,1) 100%);*/
     border-radius: 5px;
     font-weight: bold;
 }

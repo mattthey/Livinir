@@ -13,6 +13,7 @@ button{
     padding: 5px;
     padding: 20px;
     border: lightslategray 3px solid;
+    background: white;
     /*border-image: url(image/border9.png) 50 repeat repeat ;*/
     width: 70%;
     border-radius: 10px;
