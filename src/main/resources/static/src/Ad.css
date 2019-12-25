@@ -3,8 +3,8 @@ div.Ad{
     width:300px;
     height: 70%;
     min-height: 100px;
+    max-height: 120px;
     margin: 5px;
-    #border: 2px solid black;
     color:darkslategray;
     /*background: linear-gradient(101deg, rgba(255,255,255,1) 14%, rgba(233,233,255,1) 42%, rgba(184,179,214,1) 62%, rgba(134,126,181,1) 81%, rgba(39,31,89,1) 100%);*/
     background:white;
@@ -26,9 +26,22 @@ div.Ad{
     position: absolute;
     bottom: 10px;
     right: 10px;
-    background-color: rgba(65, 97, 65, 0.2);
+    /*background-color: rgba(65, 97, 65, 0.2);*/
+    background: ghostwhite;
     /*background: linear-gradient(101deg, rgba(255,255,255,1) 14%, rgba(233,233,255,1) 42%, rgba(184,179,214,1) 62%, rgba(134,126,181,1) 81%, rgba(39,31,89,1) 100%);*/
     /*background: linear-gradient(172deg, rgba(255,255,255,1) 17%, rgba(233,233,255,1) 41%, rgba(215,173,255,1) 61%, rgba(183,148,255,1) 87%, rgba(176,169,223,1) 100%);*/
     border-radius: 5px;
     font-weight: bold;
+}
+.AdDetailed{
+    color:darkslategray;
+    display:table;
+    overflow: scroll;
+    position: relative;
+    margin: 0 10px;
+    width: 640px;
+    background:white;
+    font-size: 18px;
+    padding: 10px;
+    border-radius: 20px;
 }

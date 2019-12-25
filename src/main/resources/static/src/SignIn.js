@@ -25,7 +25,7 @@ class SignIn extends Component{
 
     sentFetch(e){
         console.log(this.getDataForm(e));
-        return fetch("http://localhost:8080/api/auth/signup", {
+        return fetch("http://livinir.herokuapp.com/api/auth/signup", {
             headers:{
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
@@ -65,8 +65,8 @@ class SignIn extends Component{
         };
         return(<div className='ParentSign'>
             <form onSubmit={this.sentData} className='Sign SignIn'>
-                <input type='text' name='email' placeholder='Enter your email'/>
-                <input type='text' name='password' placeholder='Enter your password'/>
+                <input type='email' name='email' placeholder='Enter your email' defaultValue='test@gmail.com'/>
+                <input type='password' name='password' placeholder='Enter your password' defaultValue='123456'/>
                 <button >Sign In</button>
             </form>
         </div>)

@@ -23,6 +23,7 @@ ul.nav li, .Logout {
 }
 .Logout{
     height: 100%;
+    background-color: transparent;
     /*color: #611a8b;*/
 }
 ul{

@@ -5,17 +5,10 @@ class TableAd extends Component{
 
     constructor(props){
         super(props)
+        const ads = this.props.ads.map((item, index)=> <li key={index}><Ad ad={item}/></li> )
+        this.state = {ads: ads};
     }
 
-    initialData = () =>{
-        let arr = []
-        for (let i=0; i<12; i++)
-            arr.push(<li key={i}> <Ad /></li>);
-        return arr;
-    }
-    state={
-        ads: this.initialData()
-    }
     render() {
         return(<div className="Table">
             <ul>
