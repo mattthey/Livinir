@@ -3,7 +3,10 @@ package naumen.livinir.service;
 import naumen.livinir.entity.Announcement;
 import naumen.livinir.entity.Resident;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Интерфейс сервисного класса для работы с резидентами
@@ -24,4 +27,6 @@ public interface AnnouncementService
     public void addAnnouncement(Announcement announcement);
 
     public List<Announcement> getAnnouncements(int count);
+
+    public void createAnnouncement(Map<String, String> data) throws ParseException;
 }

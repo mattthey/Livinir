@@ -2,8 +2,10 @@ package naumen.livinir.dao;
 
 import naumen.livinir.entity.Announcement;
 import naumen.livinir.entity.Resident;
+import naumen.livinir.utils.Sex;
 
 import javax.persistence.Id;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -40,17 +42,12 @@ public interface AnnouncementDao
     public Announcement getById(long id);
 
     /**
-     * Добавить сожителя к объявлению
-     * @param resident сожитель
-     * @param announcement объявление к которому добавляем
-     */
-    public void addResident(Resident resident, Announcement announcement);
-
-    /**
-     *
+     * Возвращает первые
      * @param count
      * @return
      */
     public List<Announcement> getAnnouncements(int count);
+
+    public List<Announcement> getAnnouncementsByParams(String area, String city, Date leaseDate, Sex sex);
 
 }

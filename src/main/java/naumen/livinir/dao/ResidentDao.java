@@ -27,23 +27,23 @@ public interface ResidentDao
     public Resident getById(long id);
 
     /**
+     * Получение объявление из БД по email
+     */
+    public Resident getByEmail(String email);
+
+    /**
      * Поиск пользователя с таким логином
-     * @param login
+     * @param email
      * @return
      */
-    public Resident findByLogin(String login);
+    public Resident findByEmail(String email);
 
     /**
-     * Проверка на существование пользователя с таким логином
-     * @param login логин
+     * Проверка на существование пользователя с таким логином или email
+     * @param email
      * @return логический тип
      */
-    public Boolean existsByLogin(String login);
+    public boolean existsByEmail(String email);
 
-    /**
-     * Проверка на существованя пользователя с таким email
-     * @param email - email
-     * @return логический тип
-     */
-    public Boolean existsByEmail(String email);
+    public boolean checkEmailPasswordUser(String email, String password);
 }

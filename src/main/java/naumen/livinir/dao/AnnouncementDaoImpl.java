@@ -1,17 +1,22 @@
 package naumen.livinir.dao;
 
 import naumen.livinir.entity.Announcement;
-import naumen.livinir.entity.Resident;
+import naumen.livinir.utils.Sex;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
-import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -19,6 +24,8 @@ public class AnnouncementDaoImpl implements AnnouncementDao
 {
     @Inject
     private SessionFactory sessionFactory;
+
+    private static final Logger LOG = LoggerFactory.getLogger(AnnouncementDaoImpl.class);
 
     @Override
     @Transactional
@@ -70,7 +77,30 @@ public class AnnouncementDaoImpl implements AnnouncementDao
 
     @Override
     @Transactional
-    public void addResident(Resident resident, Announcement announcement)
+    public List<Announcement> getAnnouncementsByParams(String area, String city, Date leaseDate, Sex sex)
     {
+        StringBuilder announcementsByParamsHql = new StringBuilder("FROM Announcement ");
+        try {
+
+            if (area != null || city != null || leaseDate != null || sex != null) {
+                List<String> conditions = new ArrayList<>();
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                if (area != null && !area.trim().isEmpty())
+                    conditions.add(String.format("area = '%s' ", area));
+                if (city != null && !city.trim().isEmpty())
+                    conditions.add(String.format("city = '%s' ", city));
+                if (leaseDate != null)
+                    conditions.add(String.format("leaseDate = '%s' ", format.format(leaseDate.getTime())));
+                if (sex != null)
+                    conditions.add(String.format("owner.sex = %d ", sex.ordinal()));
+                announcementsByParamsHql.append("WHERE " + String.join("AND ", conditions));
+            }
+        } catch (Exception e) {
+            LOG.warn("have exception {} with name {}", e.getMessage(), e.getClass().toString());
+        }
+        LOG.info("result query " + announcementsByParamsHql.toString());
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery(announcementsByParamsHql.toString());
+        return query.list();
     }
 }

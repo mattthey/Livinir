@@ -1,3 +1,5 @@
 .idea/
 livinir.iml
 target/
+src/main/resources/
+src/main/resources/db.properties

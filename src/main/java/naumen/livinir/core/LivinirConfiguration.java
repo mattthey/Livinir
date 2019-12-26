@@ -1,7 +1,5 @@
 package naumen.livinir.core;
 
-import naumen.livinir.entity.Announcement;
-import naumen.livinir.entity.Resident;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -28,7 +26,6 @@ import java.util.Properties;
 @ComponentScans(value = {
         @ComponentScan("naumen.livinir.*")
 })
-@Import( { SecurityConfig.class })
 public class LivinirConfiguration
 {
     @Autowired
@@ -57,9 +54,8 @@ public class LivinirConfiguration
         props.put("hibernate.dialect", env.getProperty("hibernate.dialect"));
 
         factoryBean.setHibernateProperties(props);
-        factoryBean.setAnnotatedClasses(Resident.class, Announcement.class);
-        // TODO хз что будет лучше
-//        factoryBean.setPackagesToScan({""});
+//        factoryBean.setAnnotatedClasses(Resident.class, Announcement.class, UserSession.class);
+        factoryBean.setPackagesToScan("naumen.livinir.entity");
         return factoryBean;
     }
 

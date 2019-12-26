@@ -1,17 +1,16 @@
 package naumen.livinir.api;
 
-import javax.validation.Valid;
+import javax.servlet.http.HttpServletRequest;
 
-import naumen.livinir.api.form.LoginForm;
-import naumen.livinir.api.form.SignUpForm;
 import naumen.livinir.api.response.JwtResponse;
 import naumen.livinir.dao.ResidentDao;
-import naumen.livinir.entity.Resident;
-import naumen.livinir.security.JwtProvider;
+import naumen.livinir.service.JwtServiceImpl;
+import naumen.livinir.service.ResidentServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,86 +18,78 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.Map;
+
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
 public class AuthRestApi
 {
-
-    @Autowired
-    AuthenticationManager authenticationManager;
+    private static final Logger LOG = LoggerFactory.getLogger(AuthRestApi.class);
 
     @Autowired
     ResidentDao residentDao;
 
     @Autowired
-    PasswordEncoder encoder;
+    ResidentServiceImpl residentService;
 
     @Autowired
-    JwtProvider jwtProvider;
+    JwtServiceImpl jwtProvider;
+
+    @Autowired
+    AuthenticationManager authenticationManager;
+
+    @Autowired
+    PasswordEncoder encoder;
+
+    @PostMapping("/refresh-token")
+    public ResponseEntity<?> refreshToken(HttpServletRequest request) throws IOException
+    {
+        Map<String, String> requestBody = HttpHelper.getRequestJSONContent(request);
+        jwtProvider.validateJwtToken(requestBody.get("accessToken"));
+        return null;
+    }
+
 
     @PostMapping("/signin")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginForm loginRequest)
+    public ResponseEntity<?> authenticateUser(HttpServletRequest request) throws IOException
     {
+        Map<String, String> requestBody = HttpHelper.getRequestJSONContent(request);
+        String email = requestBody.get("email");
+        String password = requestBody.get("password");
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.getLogin(),
-                        loginRequest.getPassword()
-                )
+                new UsernamePasswordAuthenticationToken(email, password)
         );
-
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        String jwt = jwtProvider.generateJwtToken(authentication);
-        return ResponseEntity.ok(new JwtResponse(jwt));
+        String accessToken = jwtProvider.generateJwtAccessToken(email);
+        String refreshToken = jwtProvider.generateJwtRefreshToken(email);
+        return ResponseEntity.ok(new JwtResponse(accessToken, refreshToken));
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<String> registerUser(@Valid @RequestBody SignUpForm signUpRequest)
+    public ResponseEntity<String> registerUser(HttpServletRequest request) throws IOException, ParseException
     {
-        if(residentDao.existsByLogin(signUpRequest.getLogin()))
+        Map<String, String> requestBody = HttpHelper.getRequestJSONContent(request);
+        String password = requestBody.get("password");
+        String email = requestBody.get("email");
+        if(email == null || password == null || residentDao.existsByEmail(email))
         {
-            return new ResponseEntity<String>("Fail -> Username is already taken!",
+            return new ResponseEntity<String>("Fail -> Email is already taken or password is empty!",
                     HttpStatus.BAD_REQUEST);
         }
-
-        if(residentDao.existsByEmail(signUpRequest.getEmail()))
-        {
-            return new ResponseEntity<String>("Fail -> Email is already in use!",
-                    HttpStatus.BAD_REQUEST);
-        }
-
-        // Creating user's account
-        Resident user = new Resident();
-        user.setFirstName(signUpRequest.getName());
-        user.setLogin(signUpRequest.getLogin());
-        user.setEmail(signUpRequest.getEmail());
-        user.setPassword(encoder.encode(signUpRequest.getPassword()));
-        user.setRoles(signUpRequest.getRole());
-        residentDao.create(user);
-        return ResponseEntity.ok().body("User registered successfully!");
+        residentService.createResident(requestBody);
+        LOG.info("Success registrer new user {}", email);
+        return ResponseEntity.ok().body("Resident registered successfully!");
     }
 
-    // Для тестов ---------------
-
-    @GetMapping("/api/test/user")
-    @PreAuthorize("hasRole('user') or hasRole('admin')")
-    public String userAccess()
+    @PostMapping("/logout")
+    public void logout(HttpServletRequest request) throws IOException
     {
-        return ">>> User Contents!";
-    }
-
-    @GetMapping("/api/test/pm")
-    @PreAuthorize("hasRole('pm') or hasRole('admin')")
-    public String projectManagementAccess()
-    {
-        return ">>> Board Management Project";
-    }
-
-    @GetMapping("/api/test/admin")
-    @PreAuthorize("hasRole('admin')")
-    public String adminAccess()
-    {
-        return ">>> Admin Contents";
+        Map<String, String> requestBody = HttpHelper.getRequestJSONContent(request);
+        String email = requestBody.get("email");
+        LOG.info("User {} logout", email);
     }
 }

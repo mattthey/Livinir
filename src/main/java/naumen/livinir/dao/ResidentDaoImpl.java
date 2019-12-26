@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -24,7 +23,7 @@ public class ResidentDaoImpl implements ResidentDao
     @Transactional
     public void create(Resident resident)
     {
-        Session session = sessionFactory.getCurrentSession();
+        Session session = getCurrentSession();
         session.save(resident);
         session.flush();
     }
@@ -33,7 +32,7 @@ public class ResidentDaoImpl implements ResidentDao
     @Transactional
     public void delete(Resident resident)
     {
-        Session session = sessionFactory.getCurrentSession();
+        Session session = getCurrentSession();
         session.delete(resident);
         session.flush();
     }
@@ -42,7 +41,7 @@ public class ResidentDaoImpl implements ResidentDao
     @Transactional
     public void update(Resident resident)
     {
-        Session session = sessionFactory.getCurrentSession();
+        Session session = getCurrentSession();
         session.save(resident);
         session.flush();
     }
@@ -51,7 +50,7 @@ public class ResidentDaoImpl implements ResidentDao
     @Transactional
     public Resident getById(long id)
     {
-        Session session = sessionFactory.getCurrentSession();
+        Session session = getCurrentSession();
 
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
         CriteriaQuery<Resident> criteriaQuery = criteriaBuilder.createQuery(Resident.class);
@@ -65,9 +64,41 @@ public class ResidentDaoImpl implements ResidentDao
 
     @Override
     @Transactional
-    public Boolean existsByEmail(String email)
+    public Resident getByEmail(String email)
     {
-        Session session = sessionFactory.getCurrentSession();
+        Session session = getCurrentSession();
+
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<Resident> criteriaQuery = criteriaBuilder.createQuery(Resident.class);
+        Root<Resident> root = criteriaQuery.from(Resident.class);
+        criteriaQuery.select(root)
+                .where(criteriaBuilder.equal(root.get("email"), email));
+        Query query = session.createQuery(criteriaQuery).setMaxResults(1);
+        List<Resident> results = (List<Resident>) query.getResultList();
+        return results.size() > 0 ? results.get(0) : null;
+    }
+
+    @Override
+    @Transactional
+    public Resident findByEmail(String email)
+    {
+        Session session = getCurrentSession();
+
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<Resident> criteriaQuery = criteriaBuilder.createQuery(Resident.class);
+        Root<Resident> root = criteriaQuery.from(Resident.class);
+        criteriaQuery.select(root)
+                .where(criteriaBuilder.equal(root.get("email"), email));
+        Query query = session.createQuery(criteriaQuery).setMaxResults(1);
+        List<Resident> results = (List<Resident>) query.getResultList();
+        return results.size() > 0 ? results.get(0) : null;
+    }
+
+    @Override
+    @Transactional
+    public boolean existsByEmail(String email)
+    {
+        Session session = getCurrentSession();
 
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
         CriteriaQuery<Resident> criteriaQuery = criteriaBuilder.createQuery(Resident.class);
@@ -80,34 +111,25 @@ public class ResidentDaoImpl implements ResidentDao
     }
 
     @Override
-    @Transactional
-    public Resident findByLogin(String login)
+    public boolean checkEmailPasswordUser(String email, String password)
     {
-        Session session = sessionFactory.getCurrentSession();
+        Session session = getCurrentSession();
 
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
         CriteriaQuery<Resident> criteriaQuery = criteriaBuilder.createQuery(Resident.class);
         Root<Resident> root = criteriaQuery.from(Resident.class);
         criteriaQuery.select(root)
-                .where(criteriaBuilder.equal(root.get("login"), login));
-        Query query = session.createQuery(criteriaQuery).setMaxResults(1);
-        List<Resident> results = (List<Resident>) query.getResultList();
-        return results.size() > 0 ? results.get(0) : null;
-    }
-
-    @Override
-    @Transactional
-    public Boolean existsByLogin(String login)
-    {
-        Session session = sessionFactory.getCurrentSession();
-
-        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-        CriteriaQuery<Resident> criteriaQuery = criteriaBuilder.createQuery(Resident.class);
-        Root<Resident> root = criteriaQuery.from(Resident.class);
-        criteriaQuery.select(root)
-                .where(criteriaBuilder.equal(root.get("login"), login));
+                .where(criteriaBuilder.and (
+                        criteriaBuilder.equal(root.get("email"), email),
+                        criteriaBuilder.equal(root.get("password"), password)
+                ));
         Query query = session.createQuery(criteriaQuery).setMaxResults(1);
         List<Resident> results = (List<Resident>) query.getResultList();
         return results.size() > 0;
+    }
+
+    private Session getCurrentSession()
+    {
+        return sessionFactory.getCurrentSession();
     }
 }

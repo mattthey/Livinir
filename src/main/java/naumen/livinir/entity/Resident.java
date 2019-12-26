@@ -1,6 +1,9 @@
 package naumen.livinir.entity;
 
 import naumen.livinir.utils.Sex;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -15,12 +18,11 @@ import java.util.*;
 
 @Entity
 @Table(name = Resident.NAME_TABLE)
-public class Resident implements Serializable
+public class Resident implements Serializable, UserDetails
 {
     // название таблицы
     public static final String NAME_TABLE = "tbl_resident";
 
-    // TODO генерировать UUID
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -34,7 +36,6 @@ public class Resident implements Serializable
     private String lastName;
 
     // пол
-    // @Column(nullable = false)
     private Sex sex;
 
     // день рождения
@@ -48,31 +49,6 @@ public class Resident implements Serializable
 
     // Соль + ХЭШ соответсвенно
     private String password;
-
-    private String login;
-
-    public String getLogin()
-    {
-        return login;
-    }
-
-    public void setLogin(String login)
-    {
-        this.login = login;
-    }
-
-    @ElementCollection(fetch = FetchType.EAGER)
-    private Set<String> roles = new HashSet<>();
-
-    public Set<String> getRoles()
-    {
-        return roles;
-    }
-
-    public void setRoles(Set<String> roles)
-    {
-        this.roles = roles;
-    }
 
     @ManyToOne
     private Announcement currentHouse;
@@ -186,9 +162,39 @@ public class Resident implements Serializable
         this.email = email;
     }
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.singletonList(new SimpleGrantedAuthority("user"));
+    }
+
     public String getPassword()
     {
         return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 
     public void setPassword(String password)

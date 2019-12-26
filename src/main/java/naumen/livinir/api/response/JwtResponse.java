@@ -2,22 +2,34 @@ package naumen.livinir.api.response;
 
 public class JwtResponse
 {
-    private String token;
+    private String accessToken;
+    private String refreshToken;
     private String type = "Bearer";
 
-    public JwtResponse(String accessToken)
+    public JwtResponse(String accessToken, String refreshToken)
     {
-        this.token = accessToken;
+        this.accessToken = accessToken;
+        this.refreshToken = refreshToken;
     }
 
     public String getAccessToken()
     {
-        return token;
+        return accessToken;
     }
 
     public void setAccessToken(String accessToken)
     {
-        this.token = accessToken;
+        this.accessToken = accessToken;
+    }
+
+    public String getRefreshToken()
+    {
+        return refreshToken;
+    }
+
+    public void setRefreshToken(String accessToken)
+    {
+        this.refreshToken = accessToken;
     }
 
     public String getTokenType()

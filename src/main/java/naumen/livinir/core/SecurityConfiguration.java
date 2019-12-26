@@ -2,7 +2,7 @@ package naumen.livinir.core;
 
 import naumen.livinir.security.JwtAuthEntryPoint;
 import naumen.livinir.security.JwtAuthTokenFilter;
-import naumen.livinir.service.ResidentDetailsServiceImpl;
+import naumen.livinir.service.ResidentServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -18,6 +18,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -25,10 +26,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @ComponentScans(value = {
         @ComponentScan("naumen.livinir.*")
 })
-public class SecurityConfig extends WebSecurityConfigurerAdapter
+public class SecurityConfiguration extends WebSecurityConfigurerAdapter
 {
     @Autowired
-    ResidentDetailsServiceImpl userDetailsService;
+    ResidentServiceImpl userDetailsService;
 
     @Autowired
     private JwtAuthEntryPoint unauthorizedHandler;
@@ -62,11 +63,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
     @Override
     protected void configure(HttpSecurity http) throws Exception
     {
-        http.cors().and().csrf().disable().
+                http.cors().and().csrf().disable().
                 authorizeRequests()
-                .antMatchers("/api/auth/**").permitAll()
-                .anyRequest().authenticated()
-                .and()
+                .antMatchers("/api/auth/signin","/api/auth/signup").permitAll()
+                .requestMatchers(
+                        new AntPathRequestMatcher("/addAnnouncement"),
+                        new AntPathRequestMatcher("/profile")
+                ).authenticated().and()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 

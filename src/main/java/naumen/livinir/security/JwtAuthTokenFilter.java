@@ -6,7 +6,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import naumen.livinir.service.ResidentDetailsServiceImpl;
+import naumen.livinir.service.ResidentServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ public class JwtAuthTokenFilter extends OncePerRequestFilter
     private JwtProvider tokenProvider;
 
     @Autowired
-    private ResidentDetailsServiceImpl residentDetailsService;
+    private ResidentServiceImpl residentService;
 
     private static final Logger logger = LoggerFactory.getLogger(JwtAuthTokenFilter.class);
 
@@ -35,15 +35,13 @@ public class JwtAuthTokenFilter extends OncePerRequestFilter
         {
 
             String jwt = getJwt(request);
-            if (jwt!=null && tokenProvider.validateJwtToken(jwt))
+            if (jwt != null && tokenProvider.validateJwtToken(jwt))
             {
-                String login = tokenProvider.getUserNameFromJwtToken(jwt);
-
-                UserDetails userDetails = residentDetailsService.loadUserByUsername(login);
+                String email = tokenProvider.getUserNameFromJwtToken(jwt);
+                UserDetails userDetails = residentService.loadUserByUsername(email);
                 UsernamePasswordAuthenticationToken authentication
                         = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }

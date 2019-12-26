@@ -7,7 +7,10 @@ import naumen.livinir.entity.Resident;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class AnnouncementServiceImpl implements AnnouncementService
@@ -33,5 +36,18 @@ public class AnnouncementServiceImpl implements AnnouncementService
     public List<Announcement> getAnnouncements(int count)
     {
         return announcementDao.getAnnouncements(count);
+    }
+
+    @Override
+    public void createAnnouncement(Map<String, String> data) throws ParseException
+    {
+        Announcement announcement = new Announcement();
+        announcement.setCity(data.get("city"));
+        announcement.setArea(data.get("area"));
+        announcement.setAddress(data.get("address"));
+        announcement.setLeaseDate(new SimpleDateFormat("yyyy-MM-dd").parse(data.get("lease_date")));
+                                                                                                                                                                                                                                                    announcement.setDescription(data.get("description"));
+        announcement.setOwner(residentDao.findByEmail(data.get("owner")));
+        announcementDao.create(announcement);
     }
 }

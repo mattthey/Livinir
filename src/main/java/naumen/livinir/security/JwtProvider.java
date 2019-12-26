@@ -1,7 +1,7 @@
 package naumen.livinir.security;
 
 import io.jsonwebtoken.*;
-import naumen.livinir.service.ResidentPrinciple;
+import naumen.livinir.entity.Resident;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,7 +25,7 @@ public class JwtProvider
     public String generateJwtToken(Authentication authentication)
     {
 
-        ResidentPrinciple userPrincipal = (ResidentPrinciple) authentication.getPrincipal();
+        Resident userPrincipal = (Resident) authentication.getPrincipal();
 
         return Jwts.builder()
                 .setSubject((userPrincipal.getUsername()))
